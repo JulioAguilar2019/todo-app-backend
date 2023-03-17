@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model task {
+  task_id          Int           @id @default(autoincrement())
+  name             String        @db.VarChar(100)
+  description      String?
+  start_date       DateTime      @db.Date
+  end_date         DateTime?     @db.Date
+  status           String        @db.VarChar(20)
+  task_category_id Int
+  user_profile_id  Int
+  task_category    task_category @relation(fields: [task_category_id], references: [task_category_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_task_category_id")
+  user_profile     user_profile  @relation(fields: [user_profile_id], references: [user_profile_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_profile_id")
+}
+
+model task_category {
+  task_category_id Int    @id @default(autoincrement())
+  name             String @db.VarChar(100)
+  color            String @db.VarChar(20)
+  task             task[]
+}
+
+model user_profile {
+  user_profile_id  Int     @id @default(autoincrement())
+  first_name       String  @db.VarChar(50)
+  last_name        String  @db.VarChar(50)
+  photo            String?
+  email            String  @unique @db.VarChar(100)
+  password         String  @db.VarChar(100)
+  confirm_password String  @db.VarChar(100)
+  tel              String? @db.VarChar(20)
+  task             task[]
+}
