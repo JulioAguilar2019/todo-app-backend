@@ -5,16 +5,21 @@ import morgan from 'morgan';
 import swaggerUI from 'swagger-ui-express';
 import { options } from '../swaggerOptions';
 import swaggerJSDoc from 'swagger-jsdoc';
+import routerUser from '../routes/user.routes';
 
 class Server {
   private specs = swaggerJSDoc(options);
   private app: Application;
   private port: string | undefined;
-  private taskRoutesPath: string;
+  private tasksRoutesPath: string;
+  private usersRoutesPath: string;
+  private authRoutesPath: string;
   constructor() {
     this.app = express();
     this.port = process.env.PORT;
-    this.taskRoutesPath = '/api/tasks';
+    this.tasksRoutesPath = '/v1/api/tasks';
+    this.usersRoutesPath = '/v1/api/users';
+    this.authRoutesPath = '/v1/api/auth';
 
     // Middlewares
     this.middlewares();
@@ -37,7 +42,8 @@ class Server {
   }
 
   private routes() {
-    this.app.use(this.taskRoutesPath, routerTask);
+    this.app.use(this.tasksRoutesPath, routerTask);
+    this.app.use(this.usersRoutesPath, routerUser);
     this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(this.specs));
   }
 

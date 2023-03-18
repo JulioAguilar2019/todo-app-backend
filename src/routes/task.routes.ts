@@ -1,4 +1,7 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
+import { getTasks, postTask } from '../controllers';
+import { check } from 'express-validator';
+import { validateFields } from '../middlewares';
 
 const routerTask = Router();
 
@@ -57,7 +60,7 @@ const routerTask = Router();
 
 /**
  * @swagger
- * /api/tasks:
+ * v1/api/tasks:
  *  get:
  *   summary: Get all tasks
  *   description: this function returns all tasks
@@ -72,11 +75,27 @@ const routerTask = Router();
  *           $ref: '#/components/schemas/Task'
  * */
 
-routerTask.get('/', (req: Request, res: Response) => {
-  res.json({
-    ok: true,
-    msg: 'get API',
-  });
-});
+routerTask.get('/', getTasks);
+
+routerTask.post(
+  '/',
+  [
+    check('name', 'Name is required').not().isEmpty().isLength({ min: 3 }),
+    check('description', 'Description is required')
+      .not()
+      .isEmpty()
+      .isLength({ min: 3 }),
+    check('start_date', 'Start date is required').not().isEmpty(),
+    // check('status', 'Is not a valid status').isIn([
+    //   'Pending',
+    //   'In progress',
+    //   'Completed',
+    // ]),
+    //TODO check if task_category_id exists
+    //TODO check if user_profile_id exists
+    validateFields,
+  ],
+  postTask
+);
 
 export default routerTask;
