@@ -11,8 +11,8 @@ model task {
   task_id          Int           @id @default(autoincrement())
   name             String        @db.VarChar(100)
   description      String?
-  start_date       DateTime      @db.Date
-  end_date         DateTime?     @db.Date
+  start_date       DateTime      @db.Timestamp
+  end_date         DateTime?     @db.Timestamp
   status           String        @db.VarChar(20)
   task_category_id Int
   user_profile_id  Int

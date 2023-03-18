@@ -6,11 +6,11 @@ const prisma = new PrismaClient();
 async function seed() {
   const categories = [
     {
-      name: 'Trabajo',
+      name: 'Work',
       color: 'green',
     },
     {
-      name: 'Estudio',
+      name: 'Study',
       color: 'blue',
     },
     {
@@ -22,7 +22,7 @@ async function seed() {
   const users = [
     {
       first_name: 'Juan',
-      last_name: 'Pérez',
+      last_name: 'Perez',
       photo: faker.image.avatar(),
       email: 'juan.perez@example.com',
       password: 'password123',
@@ -30,8 +30,8 @@ async function seed() {
       tel: faker.phone.number(),
     },
     {
-      first_name: 'María',
-      last_name: 'González',
+      first_name: 'Maria',
+      last_name: 'Leon',
       photo: faker.image.avatar(),
       email: 'maria.gonzalez@example.com',
       password: 'password123',
@@ -42,28 +42,28 @@ async function seed() {
 
   const tasks = [
     {
-      name: 'Enviar reporte mensual',
-      description: 'Enviar el reporte de ventas mensual al jefe',
-      start_date: new Date(2023, 2, 1),
-      end_date: new Date(2023, 2, 1),
+      name: 'Send monthly report',
+      description: 'Send the monthly sales report to the boss',
+      start_date: new Date(2023, 2, 1).toISOString(),
+      end_date: new Date(2023, 2, 1).toISOString(),
       status: 'Incomplete',
       task_category_id: 1,
       user_profile_id: 1,
     },
     {
-      name: 'Estudiar para el examen de matemáticas',
-      description: 'Repasar temas de álgebra y geometría para el examen',
-      start_date: new Date(2023, 2, 10),
-      end_date: new Date(2023, 2, 15),
+      name: 'Study for math exam',
+      description: 'Review algebra and geometry topics for the exam',
+      start_date: new Date(2023, 2, 10).toISOString(),
+      end_date: new Date(2023, 2, 15).toISOString(),
       status: 'Incomplete',
       task_category_id: 2,
       user_profile_id: 2,
     },
     {
-      name: 'Cocinar cena para la familia',
-      description: 'Preparar una cena especial para la familia',
-      start_date: new Date(2023, 2, 20),
-      end_date: new Date(2023, 2, 20),
+      name: 'Cook dinner for the family',
+      description: 'Prepare a special dinner for the family',
+      start_date: new Date(2023, 2, 20).toISOString(),
+      end_date: new Date(2023, 2, 20).toISOString(),
       status: 'Incomplete',
       task_category_id: 3,
       user_profile_id: 1,
