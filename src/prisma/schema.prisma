@@ -12,7 +12,9 @@ model task {
   name             String        @db.VarChar(100)
   description      String?
   start_date       DateTime      @db.Timestamp
+  start_time       DateTime?     @db.Time
   end_date         DateTime?     @db.Timestamp
+  end_time         DateTime?     @db.Time
   status           String        @db.VarChar(20)
   task_category_id Int
   user_profile_id  Int
