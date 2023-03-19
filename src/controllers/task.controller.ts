@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 export const getAllTasks = async (req: Request, res: Response) => {
   const prisma = new PrismaClient();
+
   const { limit = 5, from = 0 } = req.query;
 
   if (isNaN(Number(limit)) || isNaN(Number(from))) {
@@ -34,6 +35,7 @@ export const getAllTasks = async (req: Request, res: Response) => {
 
 export const getTaskById = async (req: Request, res: Response) => {
   const prisma = new PrismaClient();
+
   const { id } = req.params;
 
   try {
@@ -148,9 +150,9 @@ export const updateTask = async (req: Request, res: Response) => {
 
 export const deleteTask = async (req: Request, res: Response) => {
   const prisma = new PrismaClient();
+
   try {
     const { id } = req.params;
-
     const task = await prisma.task.delete({
       where: {
         task_id: Number(id),
