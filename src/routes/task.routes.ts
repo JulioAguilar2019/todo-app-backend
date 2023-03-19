@@ -1,5 +1,11 @@
 import { Router } from 'express';
-import { deleteTask, getTasks, postTask, updateTask } from '../controllers';
+import {
+  deleteTask,
+  getAllTasks,
+  getTaskById,
+  postTask,
+  updateTask,
+} from '../controllers';
 import { check } from 'express-validator';
 import { validateFields } from '../middlewares';
 import {
@@ -90,7 +96,14 @@ const routerTask = Router();
  *           $ref: '#/components/schemas/Task'
  * */
 
-routerTask.get('/', getTasks);
+routerTask.get('/', getAllTasks);
+
+routerTask.get(
+  '/:id',
+  check('id').custom(taskExistById),
+  [check('id', 'Id is not valid').isInt(), validateFields],
+  getTaskById
+);
 
 routerTask.post(
   '/',

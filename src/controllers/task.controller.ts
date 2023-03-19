@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 
-export const getTasks = async (req: Request, res: Response) => {
+export const getAllTasks = async (req: Request, res: Response) => {
   const prisma = new PrismaClient();
   const { limit = 5, from = 0 } = req.query;
 
@@ -27,6 +27,29 @@ export const getTasks = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       message: 'Error retrieving tasks',
+      error,
+    });
+  }
+};
+
+export const getTaskById = async (req: Request, res: Response) => {
+  const prisma = new PrismaClient();
+  const { id } = req.params;
+
+  try {
+    const task = await prisma.task.findUnique({
+      where: {
+        task_id: Number(id),
+      },
+    });
+    res.status(200).json({
+      message: 'Task retrieved successfully',
+      task,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Error retrieving task',
       error,
     });
   }
