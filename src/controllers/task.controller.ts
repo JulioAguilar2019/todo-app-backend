@@ -3,10 +3,25 @@ import { PrismaClient } from '@prisma/client';
 
 export const getTasks = async (req: Request, res: Response) => {
   const prisma = new PrismaClient();
+  const { limit = 5, from = 0 } = req.query;
+
+  if (isNaN(Number(limit)) || isNaN(Number(from))) {
+    return res.status(400).json({
+      msg: 'limit and from must be numbers',
+    });
+  }
+
   try {
-    const tasks = await prisma.task.findMany();
+    const [total, tasks] = await Promise.all([
+      prisma.task.count(),
+      prisma.task.findMany({
+        take: Number(limit),
+        skip: Number(from),
+      }),
+    ]);
     res.status(200).json({
       message: 'Tasks retrieved successfully',
+      total,
       tasks,
     });
   } catch (error) {
@@ -25,19 +40,23 @@ export const postTask = async (req: Request, res: Response) => {
       name,
       description,
       start_date,
+      start_time,
       end_date,
+      end_time,
       task_category_id,
       user_profile_id,
     } = req.body;
 
-    start_date = new Date(start_date).toISOString();
+    start_date = new Date(start_date);
 
     const task = await prisma.task.create({
       data: {
         name,
         description,
         start_date,
+        start_time,
         end_date,
+        end_time,
         status: 'Pending',
         task_category_id,
         user_profile_id,
@@ -51,6 +70,77 @@ export const postTask = async (req: Request, res: Response) => {
     console.log(error);
     res.status(500).json({
       message: 'Error creating task',
+      error,
+    });
+  }
+};
+
+export const updateTask = async (req: Request, res: Response) => {
+  const prisma = new PrismaClient();
+
+  try {
+    const { id } = req.params;
+    let {
+      name,
+      description,
+      start_date,
+      start_time,
+      end_date,
+      end_time,
+      status,
+      task_category_id,
+      user_profile_id,
+    } = req.body;
+
+    start_date = new Date(start_date);
+
+    const task = await prisma.task.update({
+      where: {
+        task_id: Number(id),
+      },
+      data: {
+        name,
+        description,
+        start_date,
+        start_time,
+        end_date,
+        end_time,
+        status,
+        task_category_id,
+        user_profile_id,
+      },
+    });
+    res.status(200).json({
+      message: 'Task updated successfully',
+      task,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Error updating task',
+      error,
+    });
+  }
+};
+
+export const deleteTask = async (req: Request, res: Response) => {
+  const prisma = new PrismaClient();
+  try {
+    const { id } = req.params;
+
+    const task = await prisma.task.delete({
+      where: {
+        task_id: Number(id),
+      },
+    });
+    res.status(200).json({
+      message: 'Task deleted successfully',
+      task,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: 'Error deleting task',
       error,
     });
   }

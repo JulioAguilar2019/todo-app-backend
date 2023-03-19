@@ -44,8 +44,8 @@ async function seed() {
     {
       name: 'Send monthly report',
       description: 'Send the monthly sales report to the boss',
-      start_date: new Date(2023, 2, 1).toISOString(),
-      end_date: new Date(2023, 2, 1).toISOString(),
+      start_date: new Date(2023, 2, 1),
+      end_date: new Date(2023, 2, 1),
       status: 'Incomplete',
       task_category_id: 1,
       user_profile_id: 1,
@@ -53,8 +53,8 @@ async function seed() {
     {
       name: 'Study for math exam',
       description: 'Review algebra and geometry topics for the exam',
-      start_date: new Date(2023, 2, 10).toISOString(),
-      end_date: new Date(2023, 2, 15).toISOString(),
+      start_date: new Date(2023, 2, 10),
+      end_date: new Date(2023, 2, 15),
       status: 'Incomplete',
       task_category_id: 2,
       user_profile_id: 2,
@@ -62,8 +62,8 @@ async function seed() {
     {
       name: 'Cook dinner for the family',
       description: 'Prepare a special dinner for the family',
-      start_date: new Date(2023, 2, 20).toISOString(),
-      end_date: new Date(2023, 2, 20).toISOString(),
+      start_date: new Date(2023, 2, 20),
+      end_date: new Date(2023, 2, 20),
       status: 'Incomplete',
       task_category_id: 3,
       user_profile_id: 1,

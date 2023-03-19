@@ -1,7 +1,12 @@
 import { Router } from 'express';
-import { getTasks, postTask } from '../controllers';
+import { deleteTask, getTasks, postTask, updateTask } from '../controllers';
 import { check } from 'express-validator';
 import { validateFields } from '../middlewares';
+import {
+  taskCategoryExistById,
+  taskExistById,
+  userExistById,
+} from '../helpers';
 
 const routerTask = Router();
 
@@ -25,10 +30,18 @@ const routerTask = Router();
  *       type: string
  *       format: date
  *       description: The start date of the task
+ *      start_time:
+ *       type: string
+ *       format: time
+ *       description: The start time of the task
  *      end_date:
  *       type: string
  *       format: date
  *       description: The end date of the task
+ *      end_time:
+ *       type: string
+ *       format: time
+ *       description: The end time of the task
  *      status:
  *       type: string
  *       description: The status of the task
@@ -51,7 +64,9 @@ const routerTask = Router();
  *       name: Task 1
  *       description: Task 1 description
  *       start_date: 2021-01-01
+ *       start_time: 10:00:00
  *       end_date: 2021-01-02
+ *       end_time: 12:00:00
  *       status: pending
  *       task_category_id: 1
  *       user_profile_id: 1
@@ -80,22 +95,45 @@ routerTask.get('/', getTasks);
 routerTask.post(
   '/',
   [
-    check('name', 'Name is required').not().isEmpty().isLength({ min: 3 }),
-    check('description', 'Description is required')
-      .not()
-      .isEmpty()
-      .isLength({ min: 3 }),
-    check('start_date', 'Start date is required').not().isEmpty(),
-    // check('status', 'Is not a valid status').isIn([
-    //   'Pending',
-    //   'In progress',
-    //   'Completed',
-    // ]),
-    //TODO check if task_category_id exists
-    //TODO check if user_profile_id exists
+    check('name', 'Name is required').isLength({ min: 3 }),
+    check('description', 'Description is required').isLength({ min: 3 }),
+    check('start_date', 'Start date is required').isDate(),
+    check('status', 'Is not a valid status').isIn([
+      'Pending',
+      'In progress',
+      'Completed',
+    ]),
+    check('task_category_id').custom(taskCategoryExistById),
+    check('user_profile_id').custom(userExistById),
     validateFields,
   ],
   postTask
 );
 
+routerTask.put(
+  '/:id',
+  [
+    check('name', 'Name is required').isLength({ min: 3 }),
+    check('description', 'Description is required').isLength({ min: 3 }),
+    check('start_date', 'Start date is required').isDate(),
+    check('status', 'Is not a valid status').isIn([
+      'Pending',
+      'In progress',
+      'Completed',
+    ]),
+    check('id', 'Id is not valid').isInt(),
+    check('id').custom(taskExistById),
+    check('task_category_id').custom(taskCategoryExistById),
+    check('user_profile_id').custom(userExistById),
+    validateFields,
+  ],
+  updateTask
+);
+
+routerTask.delete(
+  '/:id',
+  check('id', 'Id is not valid').isInt(),
+  [check('id').custom(taskExistById), validateFields],
+  deleteTask
+);
 export default routerTask;

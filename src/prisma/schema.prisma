@@ -11,13 +11,13 @@ model task {
   task_id          Int           @id @default(autoincrement())
   name             String        @db.VarChar(100)
   description      String?
-  start_date       DateTime      @db.Timestamp
-  start_time       DateTime?     @db.Time
-  end_date         DateTime?     @db.Timestamp
-  end_time         DateTime?     @db.Time
+  start_date       DateTime      @db.Timestamp(6)
+  end_date         DateTime?     @db.Timestamp(6)
   status           String        @db.VarChar(20)
   task_category_id Int
   user_profile_id  Int
+  end_time         String?       @db.VarChar(10)
+  start_time       String?       @db.VarChar(10)
   task_category    task_category @relation(fields: [task_category_id], references: [task_category_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_task_category_id")
   user_profile     user_profile  @relation(fields: [user_profile_id], references: [user_profile_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_profile_id")
 }
