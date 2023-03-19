@@ -73,6 +73,7 @@ export const postTask = async (req: Request, res: Response) => {
     } = req.body;
 
     start_date = new Date(start_date);
+    end_date = new Date(end_date);
 
     const task = await prisma.task.create({
       data: {
