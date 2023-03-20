@@ -135,6 +135,33 @@ export const options = {
             },
           ],
         },
+        post: {
+          tags: ['Tasks'],
+          summary: 'Create a task',
+          description: 'this function creates a task',
+          requestBody: {
+            description: 'Task object that needs to be added',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/Task',
+                },
+              },
+            },
+          },
+          responses: {
+            '201': {
+              description: 'Success',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Task',
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       '/v1/api/tasks/{id}': {
         get: {
