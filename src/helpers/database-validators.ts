@@ -47,3 +47,17 @@ export const taskExistById = async (id: string) => {
     }
   }
 };
+
+export const emailExist = async (email: string) => {
+  const prisma = new PrismaClient();
+
+  const user = await prisma.user_profile.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (user) {
+    throw new Error(`The email ${email} is already registered`);
+  }
+};
