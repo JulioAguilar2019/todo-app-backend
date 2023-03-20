@@ -1,14 +1,12 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../prisma/client';
 
 export const usersGet = async (req: Request, res: Response) => {
-  const prisma = new PrismaClient();
   const users = await prisma.user_profile.findMany();
   res.json(users);
 };
 
 export const usersPost = async (req: Request, res: Response) => {
-  const prisma = new PrismaClient();
   const {
     first_name,
     last_name,

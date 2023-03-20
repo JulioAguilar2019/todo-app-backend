@@ -1,9 +1,6 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-
+import prisma from '../prisma/client';
 export const getAllTasks = async (req: Request, res: Response) => {
-  const prisma = new PrismaClient();
-
   const { limit = 5, from = 0 } = req.query;
 
   if (isNaN(Number(limit)) || isNaN(Number(from))) {
@@ -34,8 +31,6 @@ export const getAllTasks = async (req: Request, res: Response) => {
 };
 
 export const getTaskById = async (req: Request, res: Response) => {
-  const prisma = new PrismaClient();
-
   const { id } = req.params;
 
   try {
@@ -58,10 +53,8 @@ export const getTaskById = async (req: Request, res: Response) => {
 };
 
 export const postTask = async (req: Request, res: Response) => {
-  const prisma = new PrismaClient();
-
   try {
-    let {
+    const {
       name,
       description,
       start_date,
@@ -72,16 +65,13 @@ export const postTask = async (req: Request, res: Response) => {
       user_profile_id,
     } = req.body;
 
-    start_date = new Date(start_date);
-    end_date = new Date(end_date);
-
     const task = await prisma.task.create({
       data: {
         name,
         description,
-        start_date,
+        start_date: new Date(start_date),
         start_time,
-        end_date,
+        end_date: new Date(end_date),
         end_time,
         status: 'Pending',
         task_category_id,
@@ -102,8 +92,6 @@ export const postTask = async (req: Request, res: Response) => {
 };
 
 export const updateTask = async (req: Request, res: Response) => {
-  const prisma = new PrismaClient();
-
   try {
     const { id } = req.params;
     let {
@@ -150,8 +138,6 @@ export const updateTask = async (req: Request, res: Response) => {
 };
 
 export const deleteTask = async (req: Request, res: Response) => {
-  const prisma = new PrismaClient();
-
   try {
     const { id } = req.params;
     const task = await prisma.task.delete({
