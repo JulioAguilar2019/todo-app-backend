@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma/client';
+
 export const getAllTasks = async (req: Request, res: Response) => {
   const { limit = 5, from = 0 } = req.query;
 
@@ -94,7 +95,7 @@ export const postTask = async (req: Request, res: Response) => {
 export const updateTask = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    let {
+    const {
       name,
       description,
       start_date,
@@ -106,8 +107,6 @@ export const updateTask = async (req: Request, res: Response) => {
       user_profile_id,
     } = req.body;
 
-    start_date = new Date(start_date);
-
     const task = await prisma.task.update({
       where: {
         task_id: Number(id),
@@ -115,9 +114,9 @@ export const updateTask = async (req: Request, res: Response) => {
       data: {
         name,
         description,
-        start_date,
+        start_date: new Date(start_date),
         start_time,
-        end_date,
+        end_date: new Date(end_date),
         end_time,
         status,
         task_category_id,
