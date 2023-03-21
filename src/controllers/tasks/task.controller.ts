@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import prisma from '../prisma/client';
+import prisma from '../../prisma/client';
 
 export const getAllTasks = async (req: Request, res: Response) => {
   const { limit = 5, from = 0 } = req.query;
