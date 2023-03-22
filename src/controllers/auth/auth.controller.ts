@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import prisma from '../../prisma/client';
 
@@ -11,14 +11,14 @@ export const loginUser = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(400).json({ msg: 'Invalid credentials' });
+      return res.status(400).json({ msg: 'This email does not have an account yet.' });
     }
 
-    // const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = bcryptjs.compareSync(password, user.password);
 
-    // if (!isMatch) {
-    //   return res.status(400).json({ msg: 'Invalid credentials' });
-    // }
+    if (!isMatch) {
+      return res.status(400).json({ msg: 'Email or password are incorrect.' });
+    }
 
     const payload = {
       user: {
@@ -28,7 +28,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     jwt.sign(
       payload,
-      process.env.JWT_SECRET as string,
+      process.env.SECRETORPRIVATEKEY as string,
       { expiresIn: 3600 },
       (error, token) => {
         if (error) throw error;

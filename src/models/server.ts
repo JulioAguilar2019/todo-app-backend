@@ -6,6 +6,7 @@ import swaggerUI from 'swagger-ui-express';
 import { options } from '../swaggerOptions';
 import swaggerJSDoc from 'swagger-jsdoc';
 import routerUser from '../routes/user.routes';
+import routerAuth from '../routes/auth.routes';
 
 class Server {
   private specs = swaggerJSDoc(options);
@@ -45,6 +46,7 @@ class Server {
     this.app.use(this.tasksRoutesPath, routerTask);
     this.app.use(this.usersRoutesPath, routerUser);
     this.app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(this.specs));
+    this.app.use(this.authRoutesPath, routerAuth);
   }
 
   public listen() {

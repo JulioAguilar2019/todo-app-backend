@@ -9,7 +9,6 @@ const routerAuth = Router();
 routerAuth.post(
   '/login',
   [
-    check('email').custom(emailExist),
     check('email', 'The email format is not correct').isEmail(),
     check('password', 'The password is required').not().isEmpty(),
     validateFields,

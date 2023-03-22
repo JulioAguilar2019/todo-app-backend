@@ -48,9 +48,9 @@ routerUser.post(
     check('tel', 'Phone number must be no more than 10 digits').isLength({
       max: 10,
     }),
-    check('tel', 'Phone number must only contain numbers').isNumeric({
-      no_symbols: true,
-    }),
+    // check('tel', 'Phone number must only contain numbers').isNumeric({
+    //   no_symbols: true,
+    // }),
     check('email').custom(emailExist),
     validateFields,
   ],
